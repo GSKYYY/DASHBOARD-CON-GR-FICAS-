@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { GlassCard } from './GlassCard';
 import { Transaction } from '../types';
-import { MoreHorizontal, Eye, Download, Archive, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Eye, Download, Archive, Trash2, Search, Filter } from 'lucide-react';
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -12,6 +12,24 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  // Filters State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'Todos' | 'Completado' | 'Pendiente' | 'Fallido'>('Todos');
+
+  // Filter Logic
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(t => {
+      const matchesSearch = 
+        t.user.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        t.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.amount.includes(searchTerm);
+      
+      const matchesStatus = statusFilter === 'Todos' || t.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [transactions, searchTerm, statusFilter]);
 
   // Handle scroll to close menu
   useEffect(() => {
@@ -67,7 +85,43 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
   };
 
   return (
-    <GlassCard title="Transacciones Recientes" className="overflow-hidden">
+    <GlassCard className="overflow-hidden">
+      {/* Header with Search and Filter */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <h3 className="text-lg font-semibold tracking-wide text-white/90">Transacciones Recientes</h3>
+        
+        <div className="flex gap-3 w-full md:w-auto">
+          {/* Search Input */}
+          <div className="relative flex-1 md:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Buscar por usuario o monto..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+            />
+          </div>
+
+          {/* Filter Dropdown */}
+          <div className="relative">
+             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <Filter className="h-4 w-4 text-slate-400" />
+             </div>
+             <select 
+               value={statusFilter}
+               onChange={(e) => setStatusFilter(e.target.value as any)}
+               className="h-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-8 text-sm text-slate-300 focus:outline-none focus:border-cyan-500/50 focus:text-white appearance-none cursor-pointer hover:bg-white/10 transition-colors"
+             >
+               <option value="Todos" className="bg-[#1e293b]">Todos</option>
+               <option value="Completado" className="bg-[#1e293b]">Completados</option>
+               <option value="Pendiente" className="bg-[#1e293b]">Pendientes</option>
+               <option value="Fallido" className="bg-[#1e293b]">Fallidos</option>
+             </select>
+          </div>
+        </div>
+      </div>
+
       <div className="overflow-x-auto pb-4">
         <table className="w-full min-w-[700px] border-collapse">
           <thead>
@@ -80,46 +134,54 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
             </tr>
           </thead>
           <tbody className="text-sm font-medium">
-            {transactions.map((t) => (
-              <tr key={t.id} className="group border-b border-white/5 transition-colors hover:bg-white/5 relative">
-                <td className="py-4 pl-2">
-                  <div className="flex items-center gap-3">
-                    <img src={t.img} alt={t.user} className="h-10 w-10 rounded-full border border-white/10 object-cover" />
-                    <div>
-                      <div className="text-white font-medium">{t.user}</div>
-                      <div className="text-xs text-slate-500">{t.email}</div>
+            {filteredTransactions.length > 0 ? (
+              filteredTransactions.map((t) => (
+                <tr key={t.id} className="group border-b border-white/5 transition-colors hover:bg-white/5 relative">
+                  <td className="py-4 pl-2">
+                    <div className="flex items-center gap-3">
+                      <img src={t.img} alt={t.user} className="h-10 w-10 rounded-full border border-white/10 object-cover" />
+                      <div>
+                        <div className="text-white font-medium">{t.user}</div>
+                        <div className="text-xs text-slate-500">{t.email}</div>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="py-4 text-slate-400">{t.date}</td>
-                <td className="py-4 font-semibold text-white tracking-wide">{t.amount}</td>
-                <td className="py-4">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${
-                    t.status === 'Completado'
-                      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
-                      : t.status === 'Pendiente'
-                      ? 'border-amber-500/30 bg-amber-500/10 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.1)]'
-                      : 'border-red-500/30 bg-red-500/10 text-red-400'
-                  }`}>
-                    <span className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
-                      t.status === 'Completado' ? 'bg-emerald-400' : t.status === 'Pendiente' ? 'bg-amber-400' : 'bg-red-400'
-                    }`}></span>
-                    {t.status}
-                  </span>
-                </td>
-                <td className="py-4 text-right pr-2">
-                  <button 
-                    ref={el => buttonRefs.current[t.id] = el}
-                    onClick={(e) => handleActionClick(t.id, e)}
-                    className={`action-button rounded-lg p-2 transition-all duration-200 outline-none focus:ring-2 focus:ring-cyan-500/50 ${
-                        activeMenuId === t.id ? 'bg-white/10 text-white' : 'text-slate-400 hover:bg-white/10 hover:text-white'
-                    }`}
-                  >
-                    <MoreHorizontal className="h-5 w-5" />
-                  </button>
+                  </td>
+                  <td className="py-4 text-slate-400">{t.date}</td>
+                  <td className="py-4 font-semibold text-white tracking-wide">{t.amount}</td>
+                  <td className="py-4">
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${
+                      t.status === 'Completado'
+                        ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
+                        : t.status === 'Pendiente'
+                        ? 'border-amber-500/30 bg-amber-500/10 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.1)]'
+                        : 'border-red-500/30 bg-red-500/10 text-red-400'
+                    }`}>
+                      <span className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
+                        t.status === 'Completado' ? 'bg-emerald-400' : t.status === 'Pendiente' ? 'bg-amber-400' : 'bg-red-400'
+                      }`}></span>
+                      {t.status}
+                    </span>
+                  </td>
+                  <td className="py-4 text-right pr-2">
+                    <button 
+                      ref={el => buttonRefs.current[t.id] = el}
+                      onClick={(e) => handleActionClick(t.id, e)}
+                      className={`action-button rounded-lg p-2 transition-all duration-200 outline-none focus:ring-2 focus:ring-cyan-500/50 ${
+                          activeMenuId === t.id ? 'bg-white/10 text-white' : 'text-slate-400 hover:bg-white/10 hover:text-white'
+                      }`}
+                    >
+                      <MoreHorizontal className="h-5 w-5" />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="py-8 text-center text-slate-500">
+                  No se encontraron transacciones que coincidan con la búsqueda.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

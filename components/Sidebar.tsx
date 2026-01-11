@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, PieChart, Wallet, Settings, LogOut, Bell } from 'lucide-react';
+import { LayoutDashboard, PieChart, Wallet, Settings, LogOut, Bell, BrainCircuit } from 'lucide-react';
 import { ViewType } from '../types';
 
 interface SidebarProps {
@@ -25,13 +25,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-20 flex-col items-center border-r border-white/10 bg-[#0f172a]/95 backdrop-blur-xl py-8 transition-all duration-300 md:w-64 md:items-start md:px-6 shadow-2xl">
       {/* Logo Area */}
-      <div className="mb-10 flex w-full items-center justify-center md:justify-start cursor-pointer" onClick={() => onNavigate('dashboard')}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-shadow">
-          <span className="text-xl font-bold text-white">N</span>
+      <div className="mb-10 flex w-full items-center justify-center md:justify-start cursor-pointer group" onClick={() => onNavigate('dashboard')}>
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300 group-hover:scale-105">
+          <BrainCircuit className="h-6 w-6 text-white" />
         </div>
-        <span className="ml-3 hidden text-xl font-bold tracking-tight text-white md:block">
-          Neon<span className="text-cyan-400">Dash</span>
-        </span>
+        <div className="ml-3 hidden md:block">
+          <span className="block text-lg font-bold tracking-tight text-white leading-none">
+            Fin<span className="text-cyan-400">Insight</span>
+          </span>
+          <span className="block text-[10px] font-medium text-slate-400 tracking-widest uppercase mt-1">
+            AI Dashboard
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
