@@ -8,6 +8,8 @@ interface KPICardProps {
 }
 
 export const KPICard: React.FC<KPICardProps> = ({ data }) => {
+  if (!data) return null;
+
   return (
     <GlassCard className="flex flex-col justify-between min-h-[180px] group">
       <div className="flex justify-between items-start gap-4">
@@ -20,21 +22,27 @@ export const KPICard: React.FC<KPICardProps> = ({ data }) => {
         </div>
       </div>
 
-      {/* Increased height for sparkline and proper padding */}
+      {/* Sparkline Chart */}
       <div className="h-16 w-full mt-6 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data.data}>
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke={data.color}
-              strokeWidth={3}
-              dot={false}
-              isAnimationActive={true}
-              animationDuration={1500}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {data.data && data.data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data.data}>
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke={data.color}
+                strokeWidth={3}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={1500}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+           <div className="h-full w-full flex items-center justify-center text-xs text-slate-600">
+             Sin datos de tendencia
+           </div>
+        )}
       </div>
     </GlassCard>
   );
