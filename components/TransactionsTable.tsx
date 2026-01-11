@@ -23,7 +23,8 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
       const matchesSearch = 
         t.user.toLowerCase().includes(searchTerm.toLowerCase()) || 
         t.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.amount.includes(searchTerm);
+        t.amount.includes(searchTerm) ||
+        t.id.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesStatus = statusFilter === 'Todos' || t.status === statusFilter;
 
@@ -80,7 +81,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
   };
 
   const handleMenuAction = (action: string, id: string) => {
-    alert(`Acción "${action}" ejecutada para la transacción ${id}`);
+    alert(`Acción "${action}" ejecutada para la orden ${id}`);
     setActiveMenuId(null);
   };
 
@@ -88,7 +89,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
     <GlassCard className="overflow-hidden">
       {/* Header with Search and Filter */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <h3 className="text-lg font-semibold tracking-wide text-white/90">Transacciones Recientes</h3>
+        <h3 className="text-lg font-semibold tracking-wide text-white/90">Últimos Pedidos</h3>
         
         <div className="flex gap-3 w-full md:w-auto">
           {/* Search Input */}
@@ -96,7 +97,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input 
               type="text" 
-              placeholder="Buscar por usuario o monto..." 
+              placeholder="Buscar cliente, ID o monto..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
@@ -114,9 +115,9 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
                className="h-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-8 text-sm text-slate-300 focus:outline-none focus:border-cyan-500/50 focus:text-white appearance-none cursor-pointer hover:bg-white/10 transition-colors"
              >
                <option value="Todos" className="bg-[#1e293b]">Todos</option>
-               <option value="Completado" className="bg-[#1e293b]">Completados</option>
+               <option value="Completado" className="bg-[#1e293b]">Pagados</option>
                <option value="Pendiente" className="bg-[#1e293b]">Pendientes</option>
-               <option value="Fallido" className="bg-[#1e293b]">Fallidos</option>
+               <option value="Fallido" className="bg-[#1e293b]">Cancelados</option>
              </select>
           </div>
         </div>
@@ -126,10 +127,10 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
         <table className="w-full min-w-[700px] border-collapse">
           <thead>
             <tr className="border-b border-white/5 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
-              <th className="pb-4 pl-2">Usuario</th>
+              <th className="pb-4 pl-2">Cliente / ID Orden</th>
               <th className="pb-4">Fecha</th>
-              <th className="pb-4">Monto</th>
-              <th className="pb-4">Estado</th>
+              <th className="pb-4">Total</th>
+              <th className="pb-4">Estado de Pago</th>
               <th className="pb-4 text-right pr-4">Acción</th>
             </tr>
           </thead>
@@ -142,7 +143,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
                       <img src={t.img} alt={t.user} className="h-10 w-10 rounded-full border border-white/10 object-cover" />
                       <div>
                         <div className="text-white font-medium">{t.user}</div>
-                        <div className="text-xs text-slate-500">{t.email}</div>
+                        <div className="text-xs text-cyan-400 font-mono">{t.id}</div>
                       </div>
                     </div>
                   </td>
@@ -159,7 +160,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
                       <span className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
                         t.status === 'Completado' ? 'bg-emerald-400' : t.status === 'Pendiente' ? 'bg-amber-400' : 'bg-red-400'
                       }`}></span>
-                      {t.status}
+                      {t.status === 'Completado' ? 'Pagado' : t.status}
                     </span>
                   </td>
                   <td className="py-4 text-right pr-2">
@@ -178,7 +179,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
             ) : (
               <tr>
                 <td colSpan={5} className="py-8 text-center text-slate-500">
-                  No se encontraron transacciones que coincidan con la búsqueda.
+                  No se encontraron pedidos que coincidan con los filtros.
                 </td>
               </tr>
             )}
@@ -193,18 +194,18 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactio
           style={{ top: menuPosition.top, left: menuPosition.left }}
         >
           <div className="py-1">
-            <button onClick={() => handleMenuAction('Ver Detalles', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
+            <button onClick={() => handleMenuAction('Ver Pedido', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
               <Eye className="h-4 w-4 text-cyan-400" /> Ver Detalles
             </button>
-            <button onClick={() => handleMenuAction('Descargar PDF', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
-              <Download className="h-4 w-4 text-emerald-400" /> Descargar Recibo
+            <button onClick={() => handleMenuAction('Descargar Factura', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
+              <Download className="h-4 w-4 text-emerald-400" /> Factura PDF
             </button>
-            <button onClick={() => handleMenuAction('Archivar', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
-              <Archive className="h-4 w-4 text-amber-400" /> Archivar
+            <button onClick={() => handleMenuAction('Reembolsar', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-colors">
+              <Archive className="h-4 w-4 text-amber-400" /> Reembolso
             </button>
             <div className="my-1 border-t border-white/10"></div>
-            <button onClick={() => handleMenuAction('Eliminar', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
-              <Trash2 className="h-4 w-4" /> Eliminar
+            <button onClick={() => handleMenuAction('Cancelar', activeMenuId)} className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
+              <Trash2 className="h-4 w-4" /> Cancelar Pedido
             </button>
           </div>
         </div>,

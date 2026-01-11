@@ -14,12 +14,12 @@ interface DashboardViewProps {
   loaded: boolean;
 }
 
-// Simulated data for "Last Month" view to demonstrate interactivity
+// Simulated data for "Last Month" view (Weekly Breakdown) - Scaled to match E-commerce context
 const revenueDataMonth: RevenueData[] = [
-  { name: 'Sem 1', ingresos: 12000, gastos: 8400 },
-  { name: 'Sem 2', ingresos: 15000, gastos: 9000 },
-  { name: 'Sem 3', ingresos: 11000, gastos: 10500 },
-  { name: 'Sem 4', ingresos: 18000, gastos: 11000 },
+  { name: 'Sem 1', ingresos: 12500, gastos: 8400 },
+  { name: 'Sem 2', ingresos: 15200, gastos: 9100 },
+  { name: 'Sem 3', ingresos: 11500, gastos: 10500 }, // Stock resupply
+  { name: 'Sem 4', ingresos: 18900, gastos: 11000 },
 ];
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ 
@@ -43,13 +43,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onClick={() => setTimeRange('7d')}
             className={`px-4 py-1.5 text-xs font-medium rounded-lg transition-all ${timeRange === '7d' ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/25' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
           >
-            Últimos 7 Días
+            Anual (Mensual)
           </button>
           <button 
             onClick={() => setTimeRange('30d')}
             className={`px-4 py-1.5 text-xs font-medium rounded-lg transition-all ${timeRange === '30d' ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/25' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
           >
-            Este Mes
+            Este Mes (Semanal)
           </button>
         </div>
       </div>

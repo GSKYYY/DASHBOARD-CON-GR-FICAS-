@@ -14,11 +14,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         <p className="mb-2 text-sm font-semibold text-white">{label}</p>
         <p className="text-xs font-medium text-cyan-400 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
-          Ingresos: ${payload[0].value.toLocaleString()}
+          Ventas: ${payload[0].value.toLocaleString()}
         </p>
         <p className="text-xs font-medium text-violet-400 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-violet-400"></span>
-          Gastos: ${payload[1].value.toLocaleString()}
+          Costos Operativos: ${payload[1].value.toLocaleString()}
         </p>
       </div>
     );
@@ -28,7 +28,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
   return (
-    <GlassCard title="Ingresos vs Gastos" className="h-full min-h-[420px] flex flex-col">
+    <GlassCard title="Rendimiento de Ventas vs Costos" className="h-full min-h-[420px] flex flex-col">
       <div className="flex-1 w-full min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>

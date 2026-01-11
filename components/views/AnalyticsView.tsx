@@ -1,23 +1,23 @@
 import React from 'react';
 import { GlassCard } from '../GlassCard';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-import { ArrowUp, Users, Clock, Globe } from 'lucide-react';
+import { ArrowUp, Users, ShoppingBag, MousePointer } from 'lucide-react';
 
 const trafficData = [
-  { name: '00:00', visitors: 120, pageviews: 240 },
-  { name: '04:00', visitors: 80, pageviews: 130 },
-  { name: '08:00', visitors: 450, pageviews: 980 },
-  { name: '12:00', visitors: 980, pageviews: 2100 },
-  { name: '16:00', visitors: 850, pageviews: 1800 },
-  { name: '20:00', visitors: 600, pageviews: 1200 },
-  { name: '23:59', visitors: 300, pageviews: 600 },
+  { name: '00:00', visitors: 120, sales: 5 },
+  { name: '04:00', visitors: 80, sales: 2 },
+  { name: '08:00', visitors: 450, sales: 25 },
+  { name: '12:00', visitors: 1200, sales: 85 },
+  { name: '16:00', visitors: 950, sales: 60 },
+  { name: '20:00', visitors: 1500, sales: 110 }, // Prime shopping time
+  { name: '23:59', visitors: 500, sales: 30 },
 ];
 
 const sourceData = [
-  { name: 'Directo', value: 45, color: '#22d3ee' },
-  { name: 'Social', value: 32, color: '#8b5cf6' },
-  { name: 'Orgánico', value: 18, color: '#10b981' },
-  { name: 'Referencia', value: 5, color: '#f472b6' },
+  { name: 'Google Ads', value: 45, color: '#22d3ee' },
+  { name: 'Instagram/TikTok', value: 30, color: '#8b5cf6' },
+  { name: 'Email Marketing', value: 15, color: '#10b981' },
+  { name: 'Directo/SEO', value: 10, color: '#f472b6' },
 ];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -31,7 +31,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
             <span className="font-bold">{payload[0].value}</span>
           </p>
           <p className="text-xs font-medium text-violet-400 flex justify-between gap-4">
-            <span>Vistas:</span>
+            <span>Ventas:</span>
             <span className="font-bold">{payload[1].value}</span>
           </p>
         </div>
@@ -52,31 +52,31 @@ export const AnalyticsView: React.FC<{ loaded: boolean }> = ({ loaded }) => {
             <Users className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-slate-400 text-xs uppercase tracking-wider">Usuarios en Tiempo Real</p>
+            <p className="text-slate-400 text-xs uppercase tracking-wider">Tráfico Web Hoy</p>
             <h4 className="text-2xl font-bold text-white flex items-center gap-2">
-              1,245 <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center"><ArrowUp className="h-3 w-3 mr-1" /> 12%</span>
+              4,800 <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center"><ArrowUp className="h-3 w-3 mr-1" /> 12%</span>
             </h4>
           </div>
         </GlassCard>
         <GlassCard className="flex items-center gap-4">
           <div className="p-3 rounded-xl bg-violet-500/10 text-violet-400">
-            <Clock className="h-6 w-6" />
+            <ShoppingBag className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-slate-400 text-xs uppercase tracking-wider">Tiempo Promedio</p>
+            <p className="text-slate-400 text-xs uppercase tracking-wider">Productos Vistos</p>
             <h4 className="text-2xl font-bold text-white flex items-center gap-2">
-              4m 32s <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center"><ArrowUp className="h-3 w-3 mr-1" /> 5%</span>
+              15.2k <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center"><ArrowUp className="h-3 w-3 mr-1" /> 8%</span>
             </h4>
           </div>
         </GlassCard>
         <GlassCard className="flex items-center gap-4">
           <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400">
-            <Globe className="h-6 w-6" />
+            <MousePointer className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-slate-400 text-xs uppercase tracking-wider">Tasa de Rebote</p>
+            <p className="text-slate-400 text-xs uppercase tracking-wider">Click-Through Rate</p>
             <h4 className="text-2xl font-bold text-white flex items-center gap-2">
-              42.5% <span className="text-xs font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full flex items-center">-2.1%</span>
+              4.2% <span className="text-xs font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full flex items-center">-0.5%</span>
             </h4>
           </div>
         </GlassCard>
@@ -84,7 +84,7 @@ export const AnalyticsView: React.FC<{ loaded: boolean }> = ({ loaded }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Traffic Chart */}
-        <GlassCard title="Tendencias de Tráfico (24h)" className="lg:col-span-2 h-[400px]">
+        <GlassCard title="Tráfico vs Conversiones (24h)" className="lg:col-span-2 h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={trafficData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
@@ -92,7 +92,7 @@ export const AnalyticsView: React.FC<{ loaded: boolean }> = ({ loaded }) => {
                   <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
                 </linearGradient>
-                <linearGradient id="colorPageviews" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                 </linearGradient>
@@ -102,13 +102,13 @@ export const AnalyticsView: React.FC<{ loaded: boolean }> = ({ loaded }) => {
               <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
               <Area type="monotone" dataKey="visitors" stroke="#22d3ee" strokeWidth={3} fillOpacity={1} fill="url(#colorVisitors)" />
-              <Area type="monotone" dataKey="pageviews" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorPageviews)" />
+              <Area type="monotone" dataKey="sales" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorSales)" />
             </AreaChart>
           </ResponsiveContainer>
         </GlassCard>
 
         {/* Traffic Sources */}
-        <GlassCard title="Fuentes de Tráfico" className="h-[400px] flex flex-col justify-center">
+        <GlassCard title="Canales de Adquisición" className="h-[400px] flex flex-col justify-center">
           <div className="space-y-6">
             {sourceData.map((source, index) => (
               <div key={index} className="space-y-2">
@@ -130,7 +130,7 @@ export const AnalyticsView: React.FC<{ loaded: boolean }> = ({ loaded }) => {
             ))}
           </div>
           <div className="mt-8 pt-6 border-t border-white/5">
-             <p className="text-xs text-slate-500 text-center">Datos actualizados hace 5 minutos</p>
+             <p className="text-xs text-slate-500 text-center">Datos basados en atribución de último click</p>
           </div>
         </GlassCard>
       </div>

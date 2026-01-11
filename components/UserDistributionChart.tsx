@@ -9,7 +9,7 @@ interface UserDistributionChartProps {
 
 export const UserDistributionChart: React.FC<UserDistributionChartProps> = ({ data }) => {
   return (
-    <GlassCard title="Distribución de Usuarios" className="h-full min-h-[420px] flex flex-col">
+    <GlassCard title="Ventas por Dispositivo" className="h-full min-h-[420px] flex flex-col">
       <div className="relative flex-1 min-h-[220px] w-full mt-2">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -42,8 +42,8 @@ export const UserDistributionChart: React.FC<UserDistributionChartProps> = ({ da
         
         {/* Center Text - Centered absolutely relative to the container */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-          <p className="text-3xl font-bold text-white">45.2k</p>
-          <p className="text-xs text-slate-400">Total</p>
+          <p className="text-3xl font-bold text-white">100%</p>
+          <p className="text-xs text-slate-400">Ventas</p>
         </div>
       </div>
 

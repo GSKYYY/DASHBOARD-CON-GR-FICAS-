@@ -7,63 +7,64 @@ import { NotificationsView } from './components/views/NotificationsView';
 import { SettingsView } from './components/views/SettingsView';
 import { KPIData, RevenueData, UserData, Transaction, ViewType } from './types';
 
-// Updated Mock Data with Realistic Images
+// E-COMMERCE CONTEXT MOCK DATA
+
 const kpiData: KPIData[] = [
   {
-    title: 'Ingresos Totales',
-    value: '$84,250',
-    change: '12.5%',
+    title: 'Ventas Totales (Netas)',
+    value: '$124,592',
+    change: '18.2%',
     isPositive: true,
-    data: [{ value: 40 }, { value: 60 }, { value: 55 }, { value: 80 }, { value: 70 }, { value: 95 }, { value: 100 }],
+    data: [{ value: 65 }, { value: 59 }, { value: 80 }, { value: 81 }, { value: 56 }, { value: 95 }, { value: 100 }],
     color: '#22d3ee', // Cyan
   },
   {
-    title: 'Usuarios Activos',
-    value: '12,504',
-    change: '3.2%',
+    title: 'Pedidos Completados',
+    value: '1,845',
+    change: '5.4%',
     isPositive: true,
-    data: [{ value: 30 }, { value: 45 }, { value: 40 }, { value: 50 }, { value: 55 }, { value: 45 }, { value: 60 }],
+    data: [{ value: 40 }, { value: 45 }, { value: 50 }, { value: 45 }, { value: 60 }, { value: 75 }, { value: 85 }],
     color: '#8b5cf6', // Violet
   },
   {
-    title: 'Tasa de Rebote',
-    value: '42.3%',
+    title: 'Ticket Promedio (AOV)',
+    value: '$67.50',
     change: '2.1%',
     isPositive: false,
-    data: [{ value: 60 }, { value: 55 }, { value: 40 }, { value: 50 }, { value: 30 }, { value: 25 }, { value: 30 }],
+    data: [{ value: 70 }, { value: 68 }, { value: 65 }, { value: 66 }, { value: 64 }, { value: 67 }, { value: 67.5 }],
     color: '#f472b6', // Pink
   },
   {
-    title: 'Nuevas Órdenes',
-    value: '1,240',
-    change: '8.4%',
+    title: 'Tasa de Conversión',
+    value: '3.8%',
+    change: '1.2%',
     isPositive: true,
-    data: [{ value: 20 }, { value: 30 }, { value: 50 }, { value: 40 }, { value: 60 }, { value: 80 }, { value: 90 }],
+    data: [{ value: 2.1 }, { value: 2.5 }, { value: 2.8 }, { value: 3.0 }, { value: 3.2 }, { value: 3.5 }, { value: 3.8 }],
     color: '#10b981', // Emerald
   },
 ];
 
 const revenueData: RevenueData[] = [
-  { name: 'Ene', ingresos: 4000, gastos: 2400 },
-  { name: 'Feb', ingresos: 3000, gastos: 1398 },
-  { name: 'Mar', ingresos: 2000, gastos: 9800 },
-  { name: 'Abr', ingresos: 2780, gastos: 3908 },
-  { name: 'May', ingresos: 1890, gastos: 4800 },
-  { name: 'Jun', ingresos: 2390, gastos: 3800 },
-  { name: 'Jul', ingresos: 3490, gastos: 4300 },
+  { name: 'Ene', ingresos: 45000, gastos: 28000 },
+  { name: 'Feb', ingresos: 52000, gastos: 31000 },
+  { name: 'Mar', ingresos: 48000, gastos: 35000 }, // Stock restock high cost
+  { name: 'Abr', ingresos: 61000, gastos: 32000 },
+  { name: 'May', ingresos: 58000, gastos: 34000 },
+  { name: 'Jun', ingresos: 75000, gastos: 38000 }, // Summer sale start
+  { name: 'Jul', ingresos: 84000, gastos: 41000 },
 ];
 
 const userData: UserData[] = [
-  { name: 'Desktop', value: 45, color: '#22d3ee' },
-  { name: 'Mobile', value: 35, color: '#8b5cf6' },
-  { name: 'Tablet', value: 20, color: '#10b981' },
+  { name: 'Móvil (App)', value: 55, color: '#22d3ee' },
+  { name: 'Desktop (Web)', value: 35, color: '#8b5cf6' },
+  { name: 'Tablet', value: 10, color: '#10b981' },
 ];
 
 const recentTransactions: Transaction[] = [
-  { id: '1', user: 'Ana García', email: 'ana.garcia@gmail.com', date: '22 Oct 2023', amount: '$450.00', status: 'Completado', img: 'https://i.pravatar.cc/150?u=a042581f4e29026024d' },
-  { id: '2', user: 'Carlos Ruiz', email: 'carlos.ruiz@hotmail.com', date: '22 Oct 2023', amount: '$230.50', status: 'Pendiente', img: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
-  { id: '3', user: 'Sofia Lopez', email: 'sofia.desing@studio.com', date: '21 Oct 2023', amount: '$1,200.00', status: 'Completado', img: 'https://i.pravatar.cc/150?u=a04258114e29026302d' },
-  { id: '4', user: 'Miguel Angel', email: 'miguel.dev@tech.io', date: '21 Oct 2023', amount: '$85.00', status: 'Fallido', img: 'https://i.pravatar.cc/150?u=a042581f4e29026701d' },
+  { id: 'ORD-7821', user: 'Laura Méndez', email: 'laura.m@gmail.com', date: 'Hace 5 min', amount: '$129.99', status: 'Completado', img: 'https://i.pravatar.cc/150?u=a042581f4e29026024d' },
+  { id: 'ORD-7822', user: 'Roberto Diaz', email: 'rob.d@outlook.com', date: 'Hace 12 min', amount: '$45.50', status: 'Completado', img: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
+  { id: 'ORD-7823', user: 'Sofia Chen', email: 'sofia.design@studio.com', date: 'Hace 45 min', amount: '$299.00', status: 'Pendiente', img: 'https://i.pravatar.cc/150?u=a04258114e29026302d' },
+  { id: 'ORD-7824', user: 'Miguel Angel', email: 'miguel.dev@tech.io', date: 'Hace 1 hora', amount: '$85.00', status: 'Fallido', img: 'https://i.pravatar.cc/150?u=a042581f4e29026701d' },
 ];
 
 const App: React.FC = () => {
@@ -155,20 +156,20 @@ const App: React.FC = () => {
           <header className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight capitalize">
-                {currentView === 'analiticas' ? 'Analíticas' : currentView === 'configuracion' ? 'Configuración' : currentView}
+                {currentView === 'analiticas' ? 'Analíticas de Conversión' : currentView === 'configuracion' ? 'Configuración de Tienda' : currentView}
               </h1>
               <p className="text-slate-400 mt-1 text-sm sm:text-base">
-                {currentView === 'dashboard' ? 'Bienvenido de nuevo, aquí está lo que sucede hoy.' : 
-                 currentView === 'finanzas' ? 'Gestiona tus activos y tarjetas.' :
-                 currentView === 'analiticas' ? 'Métricas detalladas de rendimiento.' :
-                 currentView === 'notificaciones' ? 'Mantente al día con las últimas alertas.' :
-                 'Personaliza tu experiencia y perfil.'}
+                {currentView === 'dashboard' ? 'Resumen de rendimiento de tu tienda en tiempo real.' : 
+                 currentView === 'finanzas' ? 'Flujo de caja, pasarelas de pago y costos operativos.' :
+                 currentView === 'analiticas' ? 'Fuentes de tráfico y comportamiento del comprador.' :
+                 currentView === 'notificaciones' ? 'Alertas de stock y actualizaciones de pedidos.' :
+                 'Ajustes de cuenta y preferencias de visualización.'}
               </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                  <p className="text-sm font-semibold text-white">John Doe</p>
-                  <p className="text-xs text-slate-400">Admin</p>
+                  <p className="text-sm font-semibold text-white">Store Admin</p>
+                  <p className="text-xs text-slate-400">Pro Plan</p>
               </div>
               <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 border-white/10 shadow-lg cursor-pointer hover:border-cyan-500/50 transition-colors" onClick={() => handleNavigate('configuracion')} />
             </div>
@@ -181,11 +182,11 @@ const App: React.FC = () => {
 
           {/* Footer */}
           <footer className="mt-auto border-t border-white/5 pt-6 text-center text-sm text-slate-500">
-            <p>&copy; 2023 NeonDash Analytics. Todos los derechos reservados.</p>
+            <p>&copy; 2024 Financial Insight AI. Todos los derechos reservados.</p>
             <div className="mt-2 flex justify-center gap-4">
-              <button className="hover:text-cyan-400 transition-colors">Privacidad</button>
-              <button className="hover:text-cyan-400 transition-colors">Términos</button>
-              <button className="hover:text-cyan-400 transition-colors">Ayuda</button>
+              <button className="hover:text-cyan-400 transition-colors">Soporte Técnico</button>
+              <button className="hover:text-cyan-400 transition-colors">Documentación API</button>
+              <button className="hover:text-cyan-400 transition-colors">Estado del Sistema</button>
             </div>
           </footer>
         </div>
